@@ -1,8 +1,9 @@
-'use client';
+'use client'
+
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Disc3, Headphones, Music, Radio, Mail } from "lucide-react"
+import { Disc3, Headphones, Music, Radio } from "lucide-react"
 import { supabase } from '@/lib/supabaseClient'
 
 export default function LandingPage() {
@@ -25,8 +26,7 @@ export default function LandingPage() {
       setEmail('')
       setMessage('Thank you for joining our waitlist!')
     } catch (error) {
-      console.error('Error inserting email:', error)
-      setMessage('An error occurred. Please try again.')
+      setMessage('This email has already been signed up! Contact Christian or Tiki if you think this could be an error.')    
     } finally {
       setIsLoading(false)
     }
@@ -55,7 +55,7 @@ export default function LandingPage() {
             <p className="mt-3 max-w-md mx-auto text-base sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Join the ultimate marketplace for DJs. Sign up, get gigs, and let the music play.
             </p>
-            <div className="mt-10 flex justify-center">
+            <div className="mt-10 flex flex-col items-center">
               <form onSubmit={handleSubmit} className="flex w-full max-w-sm items-center space-x-2">
                 <Input
                   type="email"
@@ -69,10 +69,14 @@ export default function LandingPage() {
                   {isLoading ? 'Joining...' : 'Join Waitlist'}
                 </Button>
               </form>
+              {message && (
+                <div className={`mt-4 p-3 rounded-md ${
+                  'bg-cyan-800 text-white-100'
+                }`}>
+                  <p className="text-sm font-medium">{message}</p>
+                </div>
+              )}
             </div>
-            {message && (
-              <p className="mt-4 text-sm text-cyan-400">{message}</p>
-            )}
           </div>
 
           <div className="mt-20">
@@ -104,15 +108,19 @@ export default function LandingPage() {
         <footer className="mt-20 py-8 text-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-2xl font-bold text-cyan-400 mb-6">Contact Us</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <ContactCard
-                name="Christian Okokhere"
-                email="christian.okokhere@duke.edu"
-              />
-              <ContactCard
-                name="Kartikeye (Tiki) Gupta"
-                email="kartikeye.gupta@duke.edu"
-              />
+            <div className="space-y-2">
+              <p className="text-gray-400">
+                <span className="font-semibold text-pink-400">Christian Okokhere:</span>{' '}
+                <a href="mailto:christian.okokhere@duke.edu" className="hover:text-cyan-400 transition-colors">
+                  christian.okokhere@duke.edu
+                </a>
+              </p>
+              <p className="text-gray-400">
+                <span className="font-semibold text-pink-400">Kartikeye (Tiki) Gupta:</span>{' '}
+                <a href="mailto:kartikeye.gupta@duke.edu" className="hover:text-cyan-400 transition-colors">
+                  kartikeye.gupta@duke.edu
+                </a>
+              </p>
             </div>
             <p className="mt-8 text-gray-400">&copy; 2023 Dex. All rights reserved.</p>
           </div>
@@ -128,18 +136,6 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
       {icon}
       <h3 className="mt-4 text-xl font-semibold text-cyan-400">{title}</h3>
       <p className="mt-2 text-gray-400">{description}</p>
-    </div>
-  )
-}
-
-function ContactCard({ name, email }: { name: string, email: string }) {
-  return (
-    <div className="flex flex-col items-center p-6 bg-gray-900 rounded-lg border border-gray-800 hover:border-pink-400 transition-colors">
-      <Mail className="h-10 w-10 text-pink-500" />
-      <h4 className="mt-4 text-xl font-semibold text-pink-400">{name}</h4>
-      <a href={`mailto:${email}`} className="mt-2 text-gray-400 hover:text-cyan-400 transition-colors">
-        {email}
-      </a>
     </div>
   )
 }

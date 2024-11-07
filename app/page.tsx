@@ -108,21 +108,17 @@ export default function LandingPage() {
         <footer className="mt-20 py-8 text-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-2xl font-bold text-cyan-400 mb-6">Contact Us</h3>
-            <div className="space-y-2">
-              <p className="text-gray-400">
-                <span className="font-semibold text-pink-400">Christian Okokhere:</span>{' '}
-                <a href="mailto:christian.okokhere@duke.edu" className="hover:text-cyan-400 transition-colors">
-                  christian.okokhere@duke.edu
-                </a>
-              </p>
-              <p className="text-gray-400">
-                <span className="font-semibold text-pink-400">Kartikeye (Tiki) Gupta:</span>{' '}
-                <a href="mailto:kartikeye.gupta@duke.edu" className="hover:text-cyan-400 transition-colors">
-                  kartikeye.gupta@duke.edu
-                </a>
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <ContactCard
+                name="Christian Okokhere"
+                email="christian.okokhere@duke.edu"
+              />
+              <ContactCard
+                name="Kartikeye (Tiki) Gupta"
+                email="kartikeye.gupta@duke.edu"
+              />
             </div>
-            <p className="mt-8 text-gray-400">&copy; 2023 Dex. All rights reserved.</p>
+            <p className="mt-8 text-gray-400">&copy; 2024 Dex. All rights reserved.</p>
           </div>
         </footer>
       </div>
@@ -136,6 +132,17 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
       {icon}
       <h3 className="mt-4 text-xl font-semibold text-cyan-400">{title}</h3>
       <p className="mt-2 text-gray-400">{description}</p>
+    </div>
+  )
+}
+function ContactCard({ name, email }: { name: string, email: string }) {
+  return (
+    <div className="flex flex-col items-center p-6 bg-gray-900 rounded-lg border border-gray-800 hover:border-pink-400 transition-colors">
+      <Mail className="h-10 w-10 text-pink-500" />
+      <h4 className="mt-4 text-xl font-semibold text-pink-400">{name}</h4>
+      <a href={`mailto:${email}`} className="mt-2 text-gray-400 hover:text-cyan-400 transition-colors">
+        {email}
+      </a>
     </div>
   )
 }

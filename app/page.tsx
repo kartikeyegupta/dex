@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Disc3, Headphones, Music, Radio } from "lucide-react"
+import { Disc3, Headphones, Music, Radio, Mail } from "lucide-react"
 import { supabase } from '@/lib/supabaseClient'
 
 export default function LandingPage() {

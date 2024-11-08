@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabaseClient'
 
 export default function LandingPage() {
   const [email, setEmail] = useState('')
+  const [loc, setLoc] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -19,11 +20,11 @@ export default function LandingPage() {
     try {
       const { error } = await supabase
         .from('waitlist')
-        .insert([{ email }])
-
+        .insert([{ email, preferred_location: loc}])
+        
       if (error) throw error
-
       setEmail('')
+      setLoc('')
       setMessage('Thank you for joining our waitlist!')
     } catch (error) {
       setMessage('This email has already been signed up! Contact Christian or Tiki if you think this could be an error.')    
@@ -55,20 +56,27 @@ export default function LandingPage() {
             <p className="mt-3 max-w-md mx-auto text-base sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Join the ultimate marketplace for DJs. Sign up, get gigs, and let the music play.
             </p>
-            <div className="mt-10 flex flex-col items-center">
-              <form onSubmit={handleSubmit} className="flex w-full max-w-sm items-center space-x-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-grow bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"
-                  required
-                />
-                <Button type="submit" className="bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold hover:from-pink-600 hover:to-cyan-600" disabled={isLoading}>
-                  {isLoading ? 'Joining...' : 'Join Waitlist'}
-                </Button>
-              </form>
+            <div className="mt-20 flex flex-col items-center">
+                  <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm items-center space-y-5">
+                    <Input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"
+                      required
+                    />
+                    <Input
+                      type="preferred_location"
+                      placeholder="Preferred Venue Location: City, State (Optional)"
+                      value={loc}
+                      onChange={(e) => setLoc(e.target.value)}
+                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"
+                    />
+                    <Button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold hover:from-pink-600 hover:to-cyan-600" disabled={isLoading}>
+                      {isLoading ? 'Joining...' : 'Join Waitlist'}
+                    </Button>
+                  </form>
               {message && (
                 <div className={`mt-4 p-3 rounded-md ${
                   'bg-cyan-800 text-white-100'

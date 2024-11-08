@@ -5,30 +5,58 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Disc3, Headphones, Music, Radio, Mail } from "lucide-react"
 import { supabase } from '@/lib/supabaseClient'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function LandingPage() {
   const [email, setEmail] = useState('')
   const [loc, setLoc] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [role, setRole] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setMessage('')
+    setIsModalOpen(true)
+  }
 
+  const handleFinalSubmit = async () => {
     try {
       const { error } = await supabase
         .from('waitlist')
-        .insert([{ email, preferred_location: loc}])
+        .insert([{ email, location: loc, role }])
         
       if (error) throw error
       setEmail('')
       setLoc('')
+      setRole('')
       setMessage('Thank you for joining our waitlist!')
     } catch (error) {
       setMessage('This email has already been signed up! Contact Christian or Tiki if you think this could be an error.')    
     } finally {
+      setIsLoading(false)
+      setIsModalOpen(false)
+    }
+  }
+
+  const handleDialogChange = (open: boolean) => {
+    setIsModalOpen(open)
+    if (!open) {
       setIsLoading(false)
     }
   }
@@ -57,25 +85,25 @@ export default function LandingPage() {
               Join the ultimate marketplace for DJs. Sign up, get gigs, and let the music play.
             </p>
             <div className="mt-20 flex flex-col items-center">
-                  <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm items-center space-y-5">
-                    <Input
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
-                    />
-                    <Input
-                      type="preferred_location"
-                      placeholder="Preferred Venue Location: 'e.g., NY' (Optional)"
-                      value={loc}
-                      onChange={(e) => setLoc(e.target.value)}
-                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
-                    />
-                    <Button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold hover:from-pink-600 hover:to-cyan-600" disabled={isLoading}>
-                      {isLoading ? 'Joining...' : 'Join Waitlist'}
-                    </Button>
-                  </form>
+              <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-sm items-center space-y-5">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
+                />
+                <Input
+                  type="location"
+                  placeholder="Location: 'e.g., NY' (Optional)"
+                  value={loc}
+                  onChange={(e) => setLoc(e.target.value)}
+                  className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
+                />
+                <Button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold hover:from-pink-600 hover:to-cyan-600" disabled={isLoading}>
+                  {isLoading ? 'Joining...' : 'Join Waitlist'}
+                </Button>
+              </form>
               {message && (
                 <div className={`mt-4 p-3 rounded-md ${
                   'bg-cyan-800 text-white-100'
@@ -129,6 +157,29 @@ export default function LandingPage() {
           </div>
         </footer>
       </div>
+
+      <Dialog open={isModalOpen} onOpenChange={handleDialogChange}>
+        <DialogContent className="sm:max-w-[425px] bg-gray-900 text-white">
+          <DialogHeader>
+            <DialogTitle>I'm a:</DialogTitle>
+            <DialogDescription>
+              Please select your role to complete the registration.
+            </DialogDescription>
+          </DialogHeader>
+          <Select onValueChange={setRole} value={role}>
+            <SelectTrigger className="w-full bg-gray-800 text-white border-gray-700">
+              <SelectValue placeholder="Select your role" />
+            </SelectTrigger>
+            <SelectContent className="bg-gray-800 text-white border-gray-700">
+              <SelectItem value="DJ">DJ</SelectItem>
+              <SelectItem value="Venue">Venue</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button onClick={handleFinalSubmit} disabled={!role} className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold hover:from-pink-600 hover:to-cyan-600">
+            Complete Registration
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
@@ -142,6 +193,7 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
     </div>
   )
 }
+
 function ContactCard({ name, email }: { name: string, email: string }) {
   return (
     <div className="flex flex-col items-center p-6 bg-gray-900 rounded-lg border border-gray-800 hover:border-pink-400 transition-colors">
@@ -153,5 +205,3 @@ function ContactCard({ name, email }: { name: string, email: string }) {
     </div>
   )
 }
-
-

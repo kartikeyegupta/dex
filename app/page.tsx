@@ -63,14 +63,14 @@ export default function LandingPage() {
                       placeholder="Enter your email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"
+                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
                     />
                     <Input
                       type="preferred_location"
                       placeholder="Preferred Venue Location: 'e.g., NY' (Optional)"
                       value={loc}
                       onChange={(e) => setLoc(e.target.value)}
-                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"
+                      className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
                     />
                     <Button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold hover:from-pink-600 hover:to-cyan-600" disabled={isLoading}>
                       {isLoading ? 'Joining...' : 'Join Waitlist'}

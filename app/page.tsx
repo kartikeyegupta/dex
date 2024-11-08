@@ -64,11 +64,10 @@ export default function LandingPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"
-                      required
                     />
                     <Input
                       type="preferred_location"
-                      placeholder="Preferred Venue Location: City, State (Optional)"
+                      placeholder="Preferred Venue Location: 'e.g., NY' (Optional)"
                       value={loc}
                       onChange={(e) => setLoc(e.target.value)}
                       className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500"

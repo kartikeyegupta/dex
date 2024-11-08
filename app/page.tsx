@@ -92,6 +92,7 @@ export default function LandingPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-gray-800 text-white placeholder-gray-400 border-gray-700 focus:border-cyan-500 focus:ring-cyan-500 text-center"
+                  required
                 />
                 <Input
                   type="location"
@@ -163,7 +164,7 @@ export default function LandingPage() {
           <DialogHeader>
             <DialogTitle>I'm a:</DialogTitle>
           </DialogHeader>
-          <Select onValueChange={setRole} value={role}>
+          <Select onValueChange={setRole} value={role} required>
             <SelectTrigger className="w-full bg-gray-800 text-white border-gray-700">
               <SelectValue placeholder="Select your role" />
             </SelectTrigger>

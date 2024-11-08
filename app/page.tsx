@@ -162,9 +162,6 @@ export default function LandingPage() {
         <DialogContent className="sm:max-w-[425px] bg-gray-900 text-white">
           <DialogHeader>
             <DialogTitle>I'm a:</DialogTitle>
-            <DialogDescription>
-              Please select your role to complete the registration.
-            </DialogDescription>
           </DialogHeader>
           <Select onValueChange={setRole} value={role}>
             <SelectTrigger className="w-full bg-gray-800 text-white border-gray-700">

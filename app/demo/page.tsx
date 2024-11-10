@@ -53,7 +53,7 @@ const mockVenue: Venue = {
   address: "123 Party Street, Clubville, CV 12345",
   phone: "+1 (555) 123-4567",
   email: "info@neonnightsclub.com",
-  image: "/placeholder.svg?height=200&width=200",
+  image: "/nightclub_profile_image.jpg",
   socialMedia: {
     facebook: "https://facebook.com/neonnightsclub",
     instagram: "https://instagram.com/neonnightsclub",
@@ -75,7 +75,7 @@ const generateDJs = (count: number): DJ[] => {
       experiences[Math.floor(Math.random() * experiences.length)],
       Math.random() > 0.5 ? "10k+ followers" : "Rising Star"
     ],
-    image: `/placeholder.svg?height=100&width=100&text=DJ${i + 1}`,
+    image: `/ChapelHeadshotHSA.jpeg?height=100&width=100&text=DJ${i + 1}`,
     recentShows: [
       { venue: "Club X", attendance: Math.floor(Math.random() * 500) + 100, review: Number((Math.random() * 2 + 3).toFixed(1)) },
       { venue: "Festival Y", attendance: Math.floor(Math.random() * 1000) + 500, review: Number((Math.random() * 2 + 3).toFixed(1)) },
@@ -90,14 +90,14 @@ const mockUpcomingEvents: Event[] = [
   {
     id: "event-1",
     name: "Salsa Night",
-    date: "2023-12-15",
+    date: "2024-12-15",
     applicants: 10,
     djs: generateDJs(10),
   },
   {
     id: "event-2",
     name: "Techno Rave",
-    date: "2023-12-31",
+    date: "2024-12-31",
     applicants: 10,
     djs: generateDJs(10),
   },
@@ -159,8 +159,7 @@ export default function VenueHomepage() {
           </h1>
           <nav>
             <Button 
-              variant="outline" 
-              className="text-white hover:text-cyan-400 transition-colors"
+              className="bg-gradient-to-r from-pink-500 to-cyan-500 text-white"
               onClick={() => setShowVenueProfile(true)}
             >
               Profile
@@ -204,7 +203,7 @@ export default function VenueHomepage() {
       </main>
 
       <footer className="py-6 px-4 sm:px-6 lg:px-8 bg-black border-t border-pink-500 mt-10">
-        <p className="text-center text-cyan-400">&copy; 2023 Dex. All rights reserved.</p>
+        <p className="text-center text-cyan-400">&copy; 2024 Dex. All rights reserved.</p>
       </footer>
 
       {showVenueProfile && (

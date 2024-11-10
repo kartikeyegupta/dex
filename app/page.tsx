@@ -79,7 +79,7 @@ export default function LandingPage() {
           <div className="text-center">
             <h2 className="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-6xl">
               <span className="block text-cyan-400">Get Gigs.</span>
-              <span className="block text-pink-500">Drop Beats.</span>
+              <span className="block text-pink-500">Find DJs.</span>
             </h2>
             <p className="mt-3 max-w-md mx-auto text-base sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Join the ultimate marketplace for DJs. Sign up, get gigs, and let the music play.

@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dex: Get Gigs",
-  description: "A better solution for DJs",
+  title: "Dex: Get Gigs, Find DJs",
+  description: "A better solution for DJs and Venues",
 };
 
 export default function RootLayout({

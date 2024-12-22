@@ -1,4 +1,4 @@
-import { createServerClient } from '@supabase/ssr/dist/main/createServerClient'
+import { createServerClient } from '@supabase/ssr/dist/main/createServerClient.d'
 import { cookies } from 'next/headers'
 
 export async function createClient() {

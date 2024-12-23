@@ -63,7 +63,7 @@ export default async function Signup(props: {
                   </SelectContent>
                 </CNSelect>
                 <CardFooter>
-                  <SubmitButton formAction={signUpAction} pendingText="Signing up..." className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold">
+                  <SubmitButton pendingText="Signing up..." formAction={signUpAction} className="w-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-bold">
                     Sign up
                   </SubmitButton>
                 </CardFooter>

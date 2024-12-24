@@ -14,19 +14,19 @@ export const signUpAction = async (formData: FormData) => {
   const origin = (await headers()).get("origin");
 
   if (!email || !password) {
-    return { error: "Email, password and user type are required" };
+    throw new Error("Email, password and user type are required");
   }
   
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
-    emailRedirectTo: `${origin}/auth/callback`,
+      emailRedirectTo: `${origin}/auth/callback`,
     },
   });
 
   if (signUpError) {
-    return { error: signUpError.message };
+    throw new Error(signUpError.message);
   }
 
   const userId = signUpData.user?.id;
@@ -34,18 +34,18 @@ export const signUpAction = async (formData: FormData) => {
   if (userId) {
     const { error: insertError } = await supabase.from('user_profiles').insert([
       {
-        user_id: userId, // Assuming 'user_id' is the foreign key in user_profiles
+        user_id: userId,
         email: email,
         user_type: userType,
       }
     ]);
     
     if (insertError) {
-      return { error: insertError.message };
+      throw new Error(insertError.message);
     }
-  
   }
 
+  // This will handle the redirect
   return encodedRedirect(
     "success",
     "/signup",

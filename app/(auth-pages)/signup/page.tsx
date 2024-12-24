@@ -58,8 +58,8 @@ export default async function Signup(props: {
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent className="w-[180px] bg-black border-cyan-500 text-white">
-                    <SelectItem value="member">DJ</SelectItem>
-                    <SelectItem value="pledge">Venue</SelectItem>
+                    <SelectItem value="DJ">DJ</SelectItem>
+                    <SelectItem value="Venue">Venue</SelectItem>
                   </SelectContent>
                 </CNSelect>
                 <CardFooter>

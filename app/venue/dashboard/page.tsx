@@ -1,9 +1,44 @@
+// app/dj/dashboard/page.tsx
 'use client'
 
-export default function LandingPage() {
+import { useState, useEffect } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog" // or whatever modal component you use
+import { createClient } from '@/utils/supabase/client'
+
+export default function VenueDashboard() {
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      const supabase = createClient()
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('Onboard')
+        .single()
+
+      if (!profile?.Onboard) {
+        setShowOnboarding(true)
+      }
+    }
+
+    checkOnboarding()
+  }, [])
+  //this is a function to update thier onboarded status
+  
   return (
-    <div className="min-h-screen bg-black">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900 via-black to-black opacity-50"></div>
+    <div>
+      {/* Your DJ dashboard content */}
+      <h1>Venue Dashboard</h1>
+
+      {/* Onboarding Modal */}
+      <Dialog open={showOnboarding} onOpenChange={setShowOnboarding}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Complete Your Profile</DialogTitle>
+          </DialogHeader>
+          {/* Your onboarding form */}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

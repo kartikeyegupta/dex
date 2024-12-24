@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation'
 export default async function Home() {
   const supabase = await createClient()
 
-  // 1. Check if logged in using getUser instead of getSession
   const { data: { user }, error: userError } = await supabase.auth.getUser()
   
   if (userError || !user) {

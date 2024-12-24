@@ -2,43 +2,71 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog" // or whatever modal component you use
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { createClient } from '@/utils/supabase/client'
+import { Button } from '@/components/ui/button'
 
 export default function VenueDashboard() {
-  const [showOnboarding, setShowOnboarding] = useState(false)
-  
-  useEffect(() => {
-    const checkOnboarding = async () => {
-      const supabase = createClient()
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('Onboard')
-        .single()
+   const [showOnboarding, setShowOnboarding] = useState(false)
+   const [userId, setUserId] = useState<string | null>(null)
 
-      if (!profile?.Onboard) {
-        setShowOnboarding(true)
-      }
-    }
+   useEffect(() => {
+     const checkOnboarding = async () => {
+       const supabase = createClient()
+       
+       const { data: { user } } = await supabase.auth.getUser()
+       
+       if (user) {
+         setUserId(user.id)
+         
+         const { data: profile } = await supabase
+           .from('user_profiles')
+           .select('Onboard')
+           .eq('user_id', user.id)
+           .single()
 
-    checkOnboarding()
-  }, [])
-  //this is a function to update thier onboarded status
-  
-  return (
-    <div>
-      {/* Your DJ dashboard content */}
-      <h1>Venue Dashboard</h1>
+         if (!profile?.Onboard) {
+           setShowOnboarding(true)
+         }
+       }
+     }
 
-      {/* Onboarding Modal */}
-      <Dialog open={showOnboarding} onOpenChange={setShowOnboarding}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Complete Your Profile</DialogTitle>
-          </DialogHeader>
-          {/* Your onboarding form */}
-        </DialogContent>
-      </Dialog>
-    </div>
-  )
+     checkOnboarding()
+   }, [])
+
+   const handleClick = async () => {
+     const supabase = createClient()
+     
+     if (!userId) {
+       console.error('No user ID found')
+       return
+     }
+
+     const { data, error } = await supabase
+       .from('user_profiles')
+       .update({ onboard: true })
+       .eq('user_id', userId)
+       .single()
+
+     if (error) {
+       console.error('Error updating profile:', error)
+       return
+     }
+     setShowOnboarding(false)
+   }
+
+   return (
+     <div>
+       <h1>Venue Dashboard</h1>
+
+       <Dialog open={showOnboarding} onOpenChange={setShowOnboarding}>
+         <DialogContent>
+           <DialogHeader>
+             <DialogTitle>Complete Your Profile</DialogTitle>
+           </DialogHeader>
+           <Button onClick={handleClick}>Complete</Button>
+         </DialogContent>
+       </Dialog>
+     </div>
+   )
 }

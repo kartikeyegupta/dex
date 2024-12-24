@@ -23,7 +23,8 @@ export default function DJDashboard() {
 
     checkOnboarding()
   }, [])
-
+  //this is a function to update thier onboarded status
+  
   return (
     <div>
       {/* Your DJ dashboard content */}

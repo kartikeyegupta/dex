@@ -13,7 +13,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
   const isAuthenticated = cookieStore.get('auth_token')
   
   if (isAuthenticated) {
-    redirect('/demo')
+    redirect('/') //changed this to go home because that is where the routing is
   }
   const searchParams = await props.searchParams;
   return (

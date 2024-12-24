@@ -13,10 +13,10 @@ export const signUpAction = async (formData: FormData) => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
-  if (!email || !password) {
-    throw new Error("Email, password and user type are required");
+  if (!email || !password || !userType) {
+    throw new Error("Email, password, and user type are required");
   }
-  
+
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
@@ -39,7 +39,7 @@ export const signUpAction = async (formData: FormData) => {
         user_type: userType,
       }
     ]);
-    
+
     if (insertError) {
       throw new Error(insertError.message);
     }
@@ -49,7 +49,7 @@ export const signUpAction = async (formData: FormData) => {
   return encodedRedirect(
     "success",
     "/signup",
-    "Lets get some gigs."
+    "Let's get some gigs."
   );
 };
 
@@ -58,42 +58,43 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
-  const { data: session, error: signInError } = await supabase.auth.signInWithPassword({
+  const { error, data } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
-  if (signInError) {
-    return encodedRedirect("error", "/login", signInError.message);
+  if (error) {
+    return encodedRedirect("error", "/login", error.message);
   }
-  // const userId = session.user?.id;
-  // if (!userId) {
-  //   return encodedRedirect("error", "/login", "User ID not found in session.");
-  // }
 
-  // const { data: userProfile, error: profileError } = await supabase
-  //   .from("user_profiles")
-  //   .select("user_type")
-  //   .eq("user_id", userId)
-  //   .single();
+  // Get the latest user information
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-  // if (profileError || !userProfile?.user_type) {
-  //   return encodedRedirect(
-  //     "error",
-  //     "/login",
-  //     profileError?.message || "Failed to fetch user profile."
-  //   );
-  // }
+  if (userError || !user) {
+    return encodedRedirect("error", "/login", "Authentication failed");
+  }
 
-  // Redirect based on the user_type
-  // if (userProfile.user_type === "pledge") {
-  //   return redirect("/protected/pledges");
-  // } else if (userProfile.user_type === "member") {
-  //   return redirect("/protected/members");
-  // } else {
-  //   return encodedRedirect("error", "/login", "Unexpected user type.");
-  // }
-  return redirect("/demo");
+  // Fetch the user profile
+  const { data: profile, error: profileError } = await supabase
+    .from('user_profiles')
+    .select('user_type')
+    .eq('user_id', user.id)
+    .single();
+
+  if (profileError) {
+    console.error('Error fetching profile:', profileError);
+    return encodedRedirect("error", "/login", "Could not fetch user profile");
+  }
+
+  // Redirect based on user type
+  switch(profile?.user_type) {
+    case 'DJ':
+      return redirect('/dj/dashboard');
+    case 'Venue':
+      return redirect('/venue/dashboard');
+    default:
+      return redirect('/demo');
+  }
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -137,7 +138,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   const confirmPassword = formData.get("confirmPassword") as string;
 
   if (!password || !confirmPassword) {
-    encodedRedirect(
+    return encodedRedirect(
       "error",
       "/protected/reset-password",
       "Password and confirm password are required",
@@ -145,7 +146,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   }
 
   if (password !== confirmPassword) {
-    encodedRedirect(
+    return encodedRedirect(
       "error",
       "/protected/reset-password",
       "Passwords do not match",
@@ -157,14 +158,14 @@ export const resetPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    encodedRedirect(
+    return encodedRedirect(
       "error",
       "/protected/reset-password",
       "Password update failed",
     );
   }
 
-  encodedRedirect("success", "/protected/reset-password", "Password updated");
+  return encodedRedirect("success", "/protected/reset-password", "Password updated");
 };
 
 export const signOutAction = async () => {
